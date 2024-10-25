@@ -1,9 +1,53 @@
 from rest_framework import generics
 from django.shortcuts import render
 
-from .models import Usuario
+#IMPORTS MODELS
+from .models import Rol
+#from .models import Permission
+#from .models import User
+#from .models import Student
+#from .models import Teacher
+#from .models import Member
+#from .models import Partnership
+#from .models import Graduated
+#from .models import Administrative_Staff
+#from .models import Cleaning_Staff
+#from .models import Maintenance_Staff
+#from .models import Security_Staff
+#from .models import SoccerField_Reservation
+#from .models import Coworking_Reservation
+#from .models import Salon_Reservation
+#from .models import Early_Exit_Permission
+#from .models import Meeting_Request_Permission
+#from .models import Course
+#from .models import Registration
+#from .models import Reservation
+#from .models import Permission_Slip
+#from .models import Role_Permission
 
-from .serializers import UsuarioSerializer
+#IMPORTS SERIALIZERS
+from .serializers import RolSerializer
+#from .serializers import PermissionSerializer
+#from .serializers import UserSerializer
+#from .serializers import StudentSerializer
+#from .serializers import TeacherSerializer
+#from .serializers import MemberSerializer
+#from .serializers import PartnershipSerializer
+#from .serializers import GraduatedSerializer
+#from .serializers import Administrative_StaffSerializer
+#from .serializers import Cleaning_StaffSerializer
+#from .serializers import Maintenance_StaffSerializer
+#from .serializers import Security_StaffSerializer
+#from .serializers import SoccerField_ReservationSerializer
+#from .serializers import Coworking_ReservationSerializer
+#from .serializers import Salon_ReservationSerializer
+#from .serializers import Early_Exit_PermissionSerializer
+#from .serializers import Meeting_Request_PermissionSerializer
+#from .serializers import CourseSerializer
+#from .serializers import RegistrationSerializer
+#from .serializers import ReservationSerializer
+#from .serializers import Permission_SlipSerializer
+#from .serializers import Role_PermissionSerializer
 
 #/////////////////// 1. Principales ///////////////////#
 
@@ -21,8 +65,8 @@ class PermissionListCreate(generics.ListCreateAPIView):
     queryset = Permission.objects.all()
     serializer_class = RolSerializer 
 
-class RolDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Rol.objects.all()
+class PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
 
 #Métodos Users
@@ -145,22 +189,72 @@ class Salon_ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = Salon_ReservationSerializer
 
 #Métodos Early_Exit_Permissions
+class Early_Exit_PermissionListCreate(generics.ListCreateAPIView):
+    queryset = Early_Exit_Permission.objects.all()
+    serializer_class = Early_Exit_PermissionSerializer 
 
+class Early_Exit_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Early_Exit_Permission.objects.all()
+    serializer_class = Early_Exit_PermissionSerializer
+    
 #Métodos Meeting_Request_Permissions
+class Meeting_Request_PermissionListCreate(generics.ListCreateAPIView):
+    queryset = Meeting_Request_Permission.objects.all()
+    serializer_class = Meeting_Request_PermissionSerializer 
 
+class Meeting_Request_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Meeting_Request_Permission.objects.all()
+    serializer_class = Meeting_Request_PermissionSerializer
 
 #/////////////////// 3. Relación uno a muchos ///////////////////#
 
 #Métodos Courses
+class CourseListCreate(generics.ListCreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer 
+
+class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 
 #Métodos Registrations
+class RegistrationListCreate(generics.ListCreateAPIView):
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer 
+
+class RegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
 
 #Métodos Reservations
+class ReservationListCreate(generics.ListCreateAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer 
+
+class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
 
 #Métodos Permission_Slips
+class Permission_SlipListCreate(generics.ListCreateAPIView):
+    queryset = Permission_Slip.objects.all()
+    serializer_class = Permission_SlipSerializer 
+
+class Permission_SlipDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Permission_Slip.objects.all()
+    serializer_class = Permission_SlipSerializer
 
 
 #/////////////////// 4. Relación muchos a muchos ///////////////////#
 
 #Métodos Role_Permissions
-""""
+class Role_PermissionListCreate(generics.ListCreateAPIView):
+    queryset = Role_Permission.objects.all()
+    serializer_class = Role_PermissionSerializer 
+
+class Role_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Role_Permission.objects.all()
+    serializer_class = Role_PermissionSerializer
+
+
+"""
