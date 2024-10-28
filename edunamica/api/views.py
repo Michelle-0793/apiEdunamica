@@ -1,7 +1,8 @@
 from rest_framework import generics
 from django.shortcuts import render
 
-from rest_framework import permissions
+
+from rest_framework.permissions import IsAuthenticated
 
 #IMPORTS MODELS
 from .models import Rol
@@ -57,7 +58,7 @@ from .serializers import Role_PermissionSerializer
 class RolListCreate(generics.ListCreateAPIView):
     queryset = Rol.objects.all() #Define el conjunto de datos que se utilizarán (todas las recetas)
     serializer_class = RolSerializer #Especifica el serializer para convertir los datos a JSON
-    #permission_classes = [permissions.IsAuthenticated]  #Para proteger esta vista
+    permission_classes = [IsAuthenticated]  #Para proteger esta vista
 
 class RolDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rol.objects.all()
@@ -85,6 +86,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class StudentListCreate(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer 
+    permission_classes = [IsAuthenticated]  # solo estudiantes con permiso para ver contenido
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
@@ -133,10 +135,12 @@ class GraduatedDetail(generics.RetrieveUpdateDestroyAPIView):
 class Administrative_StaffListCreate(generics.ListCreateAPIView):
     queryset = Administrative_Staff.objects.all()
     serializer_class = Administrative_StaffSerializer 
+    
 
 class Administrative_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Administrative_Staff.objects.all()
-    serializer_class = Administrative_StaffSerializer    
+    serializer_class = Administrative_StaffSerializer 
+    permission_classes = [IsAuthenticated]   
     
 #Métodos Cleaning_Staff
 class Cleaning_StaffListCreate(generics.ListCreateAPIView):

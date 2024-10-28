@@ -1,7 +1,12 @@
 from django.urls import path
 from . import views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+
+    path('token/', TokenObtainPairView.as_view(), name = 'token_obtain_pair'),
+    path ('token/refresh/', TokenRefreshView.as_view(), name= 'token_resfresh'),
+    
     path('roles/', views.RolListCreate.as_view(), name='rol-list-create'),
     path('roles/<int:pk>/', views.RolDetail.as_view(), name='rol-detail'),
     
@@ -68,3 +73,4 @@ urlpatterns = [
     path('control/', views.Role_PermissionListCreate.as_view(), name = 'Role_Permission-List-Create'),
     path('control/<int:pk>/', views.Role_PermissionDetail.as_view(), name = 'Role_Permission-Detail'),
 ]
+ 

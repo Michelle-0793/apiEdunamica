@@ -1,7 +1,6 @@
 #INFORMACIÓN QUE SE VA A USAR Y COMO SE VA A USAR
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-import re
 
 #IMPORTS MODELS
 from .models import Rol
@@ -107,9 +106,7 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Rol
         fields = '__all__'
 
-
-        
-        
+      
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
