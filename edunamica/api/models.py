@@ -200,7 +200,7 @@ class Course(models.Model):
     end_date = models.DateField()
     
     def __str__(self):
-        return self.Course_Name  
+        return str(self.course_name)  
 
 
 class Registration(models.Model):
@@ -210,7 +210,7 @@ class Registration(models.Model):
     Status = models.CharField(max_length=20)
 
     def __str__(self):
-        return str(self.student)
+        return str(self.Student)
     
 
  

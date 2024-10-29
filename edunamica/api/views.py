@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny  #Importa AllowAny
 
 #IMPORTS MODELS
 from .models import Rol
@@ -63,34 +64,41 @@ class RolListCreate(generics.ListCreateAPIView):
 class RolDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rol.objects.all()
     serializer_class = RolSerializer
+    permission_classes = [IsAuthenticated]
     
 #Métodos Permissions
 class PermissionListCreate(generics.ListCreateAPIView):
     queryset = Permission.objects.all()
-    serializer_class = PermissionSerializer 
+    serializer_class = PermissionSerializer
+    #permission_classes = [IsAuthenticated]
 
 class PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
+    #permission_classes = [IsAuthenticated]
     
 #Métodos Users
 class UserListCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer 
+    serializer_class = UserSerializer
+    #permission_classes = [IsAuthenticated]
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    #permission_classes = [IsAuthenticated]
 
 #Métodos Students
 class StudentListCreate(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer 
-    permission_classes = [IsAuthenticated]  # solo estudiantes con permiso para ver contenido
+    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
+    #permission_classes = [IsAuthenticated]  # solo estudiantes con permiso para ver contenido
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer  
+    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
 
 #Métodos Teachers
 class TeacherListCreate(generics.ListCreateAPIView):
@@ -123,10 +131,12 @@ class PartnershipDetail(generics.RetrieveUpdateDestroyAPIView):
 class GraduatedListCreate(generics.ListCreateAPIView):
     queryset = Graduated.objects.all()
     serializer_class = GraduatedSerializer 
+    permission_classes = [AllowAny]  # Permitir acceso a todos sin autenticación
 
 class GraduatedDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Graduated.objects.all()
     serializer_class = GraduatedSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
     
     
 #/////////////////// 2. Relación Uno a Uno ///////////////////#
@@ -140,7 +150,7 @@ class Administrative_StaffListCreate(generics.ListCreateAPIView):
 class Administrative_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Administrative_Staff.objects.all()
     serializer_class = Administrative_StaffSerializer 
-    permission_classes = [IsAuthenticated]   
+    #permission_classes = [IsAuthenticated]   
     
 #Métodos Cleaning_Staff
 class Cleaning_StaffListCreate(generics.ListCreateAPIView):
@@ -233,10 +243,12 @@ class Meeting_Request_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
 class CourseListCreate(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer 
+    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
 
 class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
 
 #Métodos Registrations
 class RegistrationListCreate(generics.ListCreateAPIView):

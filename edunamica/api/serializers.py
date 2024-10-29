@@ -1,6 +1,8 @@
 #INFORMACIÓN QUE SE VA A USAR Y COMO SE VA A USAR
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from rest_framework import serializers
+import re
 
 #IMPORTS MODELS
 from .models import Rol
@@ -31,23 +33,17 @@ class RolSerializer(serializers.ModelSerializer):
         model = Rol
         fields = '__all__'  
         
-#Validación de espacios Vacios 
     def validate_Role_Name(self, value):
+        # Validación de espacios vacíos y longitud
         if len(value) <= 2:
             raise serializers.ValidationError("El nombre debe tener más de 2 caracteres.")
-        return value  
- 
-#Validación para el nombre empieze con Mayúscula
-    def validate_Role_Name(self, value):
+        
+        # Validación para que el nombre empiece con mayúscula
         if not value[0].isupper():
             raise serializers.ValidationError("El nombre del rol debe empezar con mayúscula.")
-        return value
 
-#Validación de espacios Vacios
-    def validate_Description(self, value):
-        if len(value) <= 10:
-            raise serializers.ValidationError("La descripción tener más de 10 caracteres.")
-        return value      
+        return value
+    
             
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,7 +59,7 @@ class PermissionSerializer(serializers.ModelSerializer):
     #Validación para el nombre empieze con Mayúscula
     def validate_Permission_Name(self, value):
         if not value[0].isupper():
-            raise serializers.ValidationError("El nombre del permiso debe empezar con mayúscula.")
+            raise ValidationError("El nombre del permiso debe empezar con mayúscula.")
         return value 
 
     #Validación de espacios Vacios
@@ -96,15 +92,42 @@ class UserSerializer(serializers.ModelSerializer):
          if not re.search(r'[A-Za-z]', value):
             raise serializers.ValidationError("La contraseña debe contener al menos una letra.")
          if not re.search(r'[0-9]', value):
-            raise serializers.ValidationError("La contraseña debe contener al menos un número.")
+            raise ValidationError("La contraseña debe contener al menos un número.")
          return value
 
 
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Rol
+        model = Student
         fields = '__all__'
+
+     #Validación de espacios Vacios
+    def validate_First_name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El nombre debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para el nombre empieze con Mayúscula
+    def validate_First_name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El nombre debe empezar con mayúscula.")
+        return value   
+
+
+         #Validación de espacios Vacios
+    def validate_Last_name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El Apellido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para el nombre empieze con Mayúscula
+    def validate_Last_name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El Apellido debe empezar con mayúscula.")
+        return value      
+    
+        
 
       
 class TeacherSerializer(serializers.ModelSerializer):
@@ -120,19 +143,29 @@ class MemberSerializer(serializers.ModelSerializer):
 class PartnershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partnership
-        fields = '__all__'      
+        fields = '__all__'  
         
 class GraduatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Graduated
-        fields = '__all__'  
+        fields = '__all__' 
+
+    def validate_Graduation_date(self, value):
+
+        current_date = timezone.now().date()
+        # Validar si la fecha es mayor o igual a la fecha actual
+        if value >= current_date:
+            raise serializers.ValidationError('La fecha debe ser anterior al día actual.')
+        
+        return value
 
         
-
 class Administrative_StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Administrative_Staff
         fields = '__all__'
+
+        
 
 class Cleaning_StaffSerializer(serializers.ModelSerializer):
     class Meta:
@@ -195,6 +228,16 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
+        
+        
+    def validate_course_name(self, course_name):
+        # Comprobar si el curso ya existe
+        if Course.objects.filter(course_name__iexact=course_name).exists():
+            raise ValidationError(f'El curso "{course_name}" ya existe.')
+        
+        return course_name
+   
+
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -202,6 +245,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = Registration
         fields = '__all__'
 
+    def validate(self, attrs):
+        student = attrs.get('Student')
+        course = attrs.get('Course')
+        
+        if Registration.objects.filter(Student=student, Course=course).exists():
+            raise serializers.ValidationError('Este estudiante ya está inscrito en este curso.')
+        
+        return attrs
 
 
 class Role_PermissionSerializer(serializers.ModelSerializer):
