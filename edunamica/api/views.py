@@ -238,7 +238,7 @@ class Meeting_Request_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = Meeting_Request_PermissionSerializer
 
 #/////////////////// 3. Relación uno a muchos ///////////////////#
- 
+
 #Métodos Courses
 class CourseListCreate(generics.ListCreateAPIView):
     queryset = Course.objects.all()
@@ -249,15 +249,6 @@ class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
-
-#Métodos Registrations
-class RegistrationListCreate(generics.ListCreateAPIView):
-    queryset = Registration.objects.all()
-    serializer_class = RegistrationSerializer 
-
-class RegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Registration.objects.all()
-    serializer_class = RegistrationSerializer
 
 
 #Métodos Permission_Slips
@@ -271,6 +262,16 @@ class Permission_SlipDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 #/////////////////// 4. Relación muchos a muchos ///////////////////#
+
+#Métodos Registrations
+class RegistrationListCreate(generics.ListCreateAPIView):
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer 
+
+class RegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
+
 
 #Métodos Role_Permissions
 class Role_PermissionListCreate(generics.ListCreateAPIView):

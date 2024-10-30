@@ -125,25 +125,135 @@ class StudentSerializer(serializers.ModelSerializer):
     def validate_Last_name(self, value):
         if not value[0].isupper():
             raise serializers.ValidationError("El Apellido debe empezar con mayúscula.")
-        return value      
+        return value   
+
+
+#Validación de espacios Vacios
+    def validate_Address (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La dirección debe tener más de 2 caracteres.")
+        return value         
     
         
 
-      
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = '__all__'   
 
+#Validación de espacios Vacios
+    def validate_First_name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El nombre debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para el nombre empieze con Mayúscula
+    def validate_First_name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El nombre debe empezar con mayúscula.")
+        return value   
+
+
+#Validación de espacios Vacios
+    def validate_Last_name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El Apellido debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para el Apellido empieze con Mayúscula
+    def validate_Last_name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El Apellido debe empezar con mayúscula.")
+        return value   
+
+#Validación de espacios Vacios
+    def validate_Specialization(self, value):
+        if len(value) <= 5:
+            raise serializers.ValidationError("La especialización debe tener más de 5 caracteres.")
+        return value  
+
+#Validación para el nombre empieze con Mayúscula
+    def validate_Specialization(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La especialización debe empezar con mayúscula.")
+        return value  
+
+
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = '__all__'    
+        fields = '__all__'
+    
+#Validación para el nombre empieze con Mayúscula
+    def validate_Name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El nombre debe empezar con mayúscula.")
+        return value   
+     
+ #Validación de espacios Vacios
+    def validate_Name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El Nombre debe tener más de 2 caracteres.")
+        return value
+
+
+#Validación de espacios Vacios
+    def validate_Last_name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El Apellido debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para el Apellido empieze con Mayúscula
+    def validate_Last_name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El Apellido debe empezar con mayúscula.")
+        return value   
+
+
+#Validación de espacios Vacios
+    def validate_Menbers_Type (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("Debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula
+    def validate_Menbers_Type(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("Debe empezar con mayúscula.")
+        return value   
+
 
 class PartnershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partnership
-        fields = '__all__'  
+        fields = '__all__' 
+
+
+    #Validación de espacios Vacios
+    def validate_Partner_Name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("Debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula
+    def validate_Partner_Name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("Debe empezar con mayúscula.")
+        return value   
+
+
+#Validación de espacios Vacios
+    def validate_Status (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El estado debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula
+    def validate_Status(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El estado debe empezar con mayúscula.")
+        return value   
+
         
 class GraduatedSerializer(serializers.ModelSerializer):
     class Meta:
@@ -166,37 +276,179 @@ class Administrative_StaffSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
         
+#Validación de espacios Vacios
+    def validate_department (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El nombre del departamento debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula
+    def validate_department(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El estado debe empezar con mayúscula.")
+        return value         
+    
+#Validación de espacios Vacios
+    def validate_office_location (self, value):
+        if len(value) <= 5:
+            raise serializers.ValidationError("Debe tener más de 5 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula
+    def validate_office_location(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("Debe empezar con mayúscula.")
+        return value 
+        
 
 class Cleaning_StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cleaning_Staff
         fields = '__all__'
 
+            
+    #Validación de espacios Vacios
+    def validate_shift  (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_shift (self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value
+
+
+        #Validación de espacios Vacios
+    def validate_assigned_area (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_assigned_area (self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value    
+
+
+
 class Maintenance_StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maintenance_Staff
         fields = '__all__'
+        
+     #Validación de espacios Vacios
+    def validate_Permission_Name(self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El nombre debe tener más de 2 caracteres.")
+        return value  
 
+    #Validación para el nombre empieze con Mayúscula
+    def validate_Permission_Name(self, value):
+        if not value[0].isupper():
+            raise ValidationError("El nombre del permiso debe empezar con mayúscula.")
+        return value    
+
+    
 class Security_StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Security_Staff
         fields = '__all__'
 
+    #Validación de espacios Vacios
+    def validate_shift  (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_shift (self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value
+
+        #Validación de espacios Vacios
+    def validate_assigned_area (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_assigned_area (self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value      
+
+                  
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
+
+        #Validación de espacios Vacios
+    def validate_Reservation_Type (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_Reservation_Type (self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value
+
+        #Validación de espacios Vacios
+    def validate_Status (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El estado debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_Status(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El estado debe empezar con mayúscula.")
+        return value 
+
+                
 
 class SoccerField_ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SoccerField_Reservation
         fields = '__all__'
 
+        #Validación de espacios Vacios
+    def validate_field_type  (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
 
+    #Validación para que empieze con Mayúscula
+    def validate_field_type (self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value
+
+                
+  
 class Coworking_ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coworking_Reservation
         fields = '__all__'
+
+            
+    #Validación de espacios Vacios
+    def validate_equipment_required (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El contenido debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula
+    def validate_equipment_required(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El contenido debe empezar con mayúscula.")
+        return value    
 
 
 class Salon_ReservationSerializer(serializers.ModelSerializer):
@@ -205,16 +457,79 @@ class Salon_ReservationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+        #Validación de espacios Vacios ("disposición de asientos")
+    def validate_seating_arrangement (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La disposicion de asientos debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula ("disposición de asientos")
+    def validate_seating_arrangement(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La disposicion de asientos debe empezar con mayúscula.")
+        return value 
+
+  
 class Permission_SlipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission_Slip
         fields = '__all__'
 
+            
+    #Validación de espacios Vacios (Estatus)
+    def validate_Status (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El estado debe tener más de 2 caracteres.")
+        return value  
 
+    #Validación para que empieze con Mayúscula (Estatus)
+    def validate_Status(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El estado debe empezar con mayúscula.")
+        return value  
+
+        #Validación de espacios Vacios (Description)
+    def validate_Description (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La descripcion debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula (Description)
+    def validate_Description(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La descripcion debe empezar con mayúscula.")
+        return value 
+
+            
+    #Validación de espacios Vacios (Tipo de permiso)
+    def validate_Permission_type (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El tipo de permiso debe tener más de 2 caracteres.")
+        return value  
+
+    #Validación para que empieze con Mayúscula (Tipo de permiso)
+    def validate_Permission_type(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El tipo de permiso debe empezar con mayúscula.")
+        return value  
+
+                 
 class Early_Exit_PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Early_Exit_Permission
         fields = '__all__'
+
+        #Validación de espacios Vacios (Razon de salida)
+    def validate_reason_for_exit (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La razón de salida debe tener más de 2 caracteres.")
+        return value  
+
+        #Validación para que empieze con Mayúscula (Razon de salida)
+    def validate_reason_for_exit(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La razón de salida debe empezar con mayúscula.")
+        return value  
 
 
 class Meeting_Request_PermissionSerializer(serializers.ModelSerializer):
@@ -222,6 +537,30 @@ class Meeting_Request_PermissionSerializer(serializers.ModelSerializer):
         model = Meeting_Request_Permission
         fields = '__all__'
 
+        #Validación de espacios Vacios (Lugar de reunion)
+    def validate_meeting_location (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La direccion debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula (Lugar de reunion)
+    def validate_meeting_location(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La direccion debe empezar con mayúscula.")
+        return value  
+
+            
+    #Validación de espacios Vacios (Respuesta sobre)
+    def validate_requested_by (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La respuesta debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula (Respuesta sobre)
+    def validate_requested_by(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La respuesta debe empezar con mayúscula.")
+        return value  
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -231,13 +570,38 @@ class CourseSerializer(serializers.ModelSerializer):
         
         
     def validate_course_name(self, course_name):
+        
         # Comprobar si el curso ya existe
         if Course.objects.filter(course_name__iexact=course_name).exists():
             raise ValidationError(f'El curso "{course_name}" ya existe.')
         
         return course_name
-   
 
+            
+    #Validación de espacios Vacios (Nombre)
+    def validate_course_name (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El nombre del curso debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula (Nombre)
+    def validate_course_name(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El nombre del curso debe empezar con mayúscula.")
+        return value  
+    
+
+     #Validación de espacios Vacios (Descripcion)
+    def validate_description (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("La descripcion del curso debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula (Descripcion)
+    def validate_description(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("La descripcion del curso debe empezar con mayúscula.")
+        return value  
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -253,9 +617,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Este estudiante ya está inscrito en este curso.')
         
         return attrs
+    
+            
+    #Validación de espacios Vacios
+    def validate_Status (self, value):
+        if len(value) <= 2:
+            raise serializers.ValidationError("El estado debe tener más de 2 caracteres.")
+        return value  
+
+#Validación para que empieze con Mayúscula
+    def validate_Status(self, value):
+        if not value[0].isupper():
+            raise serializers.ValidationError("El estado debe empezar con mayúscula.")
+        return value  
 
 
 class Role_PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role_Permission
         fields = '__all__'
+

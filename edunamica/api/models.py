@@ -198,10 +198,13 @@ class Course(models.Model):
     description = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField()
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     
     def __str__(self):
         return str(self.course_name)  
 
+
+#////////////////4. Tablas de Relaciones Muchos a Muchos ////////////////#
 
 class Registration(models.Model):
     Student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -211,11 +214,7 @@ class Registration(models.Model):
 
     def __str__(self):
         return str(self.Student)
-    
-
- 
-#////////////////4. Tablas de Relaciones Muchos a Muchos ////////////////#
-
+        
 class Role_Permission(models.Model):
     Role = models.ForeignKey(Rol, on_delete=models.CASCADE)  
     Permission = models.ForeignKey(Permission, on_delete=models.CASCADE) 
@@ -224,4 +223,3 @@ class Role_Permission(models.Model):
      return f"{self.Role} - {self.Permission}"
 
 
-  

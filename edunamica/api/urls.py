@@ -13,7 +13,7 @@ urlpatterns = [
     path('accesosRol/', views.PermissionListCreate.as_view(), name = 'Permission-List-Create'),
     path('accesosRol/<int:pk>/', views.PermissionDetail.as_view(), name= 'Permission-Detail'),
     
-    path('usuarios/', views.UserListCreate.as_view(), name='user-list-create'),
+   path('usuarios/', views.UserListCreate.as_view(), name='user-list-create'),
     path('usuarios/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),  
 
     path('estudiantes/', views.StudentListCreate.as_view(), name = 'Student-List-Create'),
@@ -72,5 +72,6 @@ urlpatterns = [
 
     path('control/', views.Role_PermissionListCreate.as_view(), name = 'Role_Permission-List-Create'),
     path('control/<int:pk>/', views.Role_PermissionDetail.as_view(), name = 'Role_Permission-Detail'),
+    
 ]
- 
+
