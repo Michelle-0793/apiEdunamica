@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import StudentCourseView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -72,6 +73,8 @@ urlpatterns = [
 
     path('control/', views.Role_PermissionListCreate.as_view(), name = 'Role_Permission-List-Create'),
     path('control/<int:pk>/', views.Role_PermissionDetail.as_view(), name = 'Role_Permission-Detail'),
+    
+    path('estudiantes_cursos/', StudentCourseView.as_view(), name='student-course-list'),
     
 ]
 

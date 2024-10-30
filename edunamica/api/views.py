@@ -2,6 +2,11 @@ from rest_framework import generics
 from django.shortcuts import render
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import StudentCourseSerializer
+
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny  #Importa AllowAny
 
@@ -283,3 +288,10 @@ class Role_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = Role_PermissionSerializer
 
 
+#CONSULTA 1
+class StudentCourseView(APIView):
+    def get(self, request):
+        # Prefetch related desde Registration
+        registrations = Registration.objects.prefetch_related('Course__teacher', 'Student')
+        serializer = StudentCourseSerializer(registrations, many=True)
+        return Response(serializer.data)

@@ -637,3 +637,31 @@ class Role_PermissionSerializer(serializers.ModelSerializer):
         model = Role_Permission
         fields = '__all__'
 
+
+
+#CONSULTAS Estudiantes, cursos en los que están matriculados, 
+#profesor asignado al curso y horario del curso
+class TeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher  # Asegúrate de que tengas este modelo
+        fields = ['id', 'First_Name', 'Last_Name', 'Email', 'Phone_Number', 'Specialization']
+
+class CourseSerializer(serializers.ModelSerializer):
+    teacher = TeacherSerializer()  # Incluye el serializador del profesor
+
+    class Meta:
+        model = Course
+        fields = ['id', 'course_name', 'start_date', 'end_date', 'teacher']  
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['id', 'First_name', 'Last_name', 'Email', 'Phone_Number', 'Registration_date']
+
+class StudentCourseSerializer(serializers.ModelSerializer):
+    Student = StudentSerializer() 
+    Course = CourseSerializer()  # Anidar el serializador del curso
+
+    class Meta:
+        model = Registration
+        fields = ['Student', 'Course']  # Incluye los campos del curso
