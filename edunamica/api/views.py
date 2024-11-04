@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from .serializers import StudentCourseSerializer
 
 from .serializers import UserRegisterSerializer
+
 from rest_framework.decorators import api_view
 
 #Para ver la lista de usuarios en postman
@@ -14,7 +15,7 @@ from .serializers import UserListSerializer
 from django.contrib.auth import get_user_model
 
 #TOKEN
-from rest_framework.permissions import IsAuthenticated,AllowAny  
+from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission
 
 
 #IMPORTS MODELS
@@ -69,21 +70,27 @@ from .serializers import Role_PermissionSerializer
 #VISTA REGISTRO DE USUARIOS TABLA DE DJANGO
 User = get_user_model()
 
-#Se define la vista 'register_user' para manejar solicitudes HTTP de tipo POST
-@api_view(['POST'])
-def register_user(request):
-    #Crea una instancia del serializador de usuario, tomando los datos que se envían en la solicitud POST
-    serializer = UserRegisterSerializer(data=request.data)
-
-    #Verificar si los datos cumplen con las reglas de validación del serializador
-    if serializer.is_valid():
-        #Si los datos son válidos, guarda el nuevo usuario en la base de datos
-        #Aquí se asegura de que la contraseña esté encriptada y los datos cumplan con el modelo de usuario
-        user = serializer.save()
-
-        return Response({"message": "¡Usuario creado con éxito!"}, status=status.HTTP_201_CREATED)
+class UserRegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
+    permission_classes = [IsAuthenticated]
     
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
+    permission_classes = [IsAuthenticated]
+
+class IsAdministrator (BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.groups.filter(name="Administrador").exists()
+
+class IsProfesor (BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.groups.filter(name="Profesor").exists()
+
+class IsEstudiante (BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.groups.filter(name = "Estudiante").exists()
 
 
 #LISTA DE USUARIOS
@@ -132,31 +139,35 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class StudentListCreate(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer 
-    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
-    #permission_classes = [IsAuthenticated]  # solo estudiantes con permiso para ver contenido
+    #permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
+    permission_classes = [IsAuthenticated]  # solo estudiantes con permiso para ver contenido
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer  
-    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
+    permission_classes = [IsAuthenticated, IsAdministrator] #Solo el administrador puede editar o eliminar estudiantes
 
 #Métodos Teachers
 class TeacherListCreate(generics.ListCreateAPIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer 
+    permission_classes = [AllowAny]  #Permitir acceso a todos verlos 
 
 class TeacherDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Teacher.objects.all()
-    serializer_class = TeacherSerializer    
+    serializer_class = TeacherSerializer 
+    permission_classes = [IsAuthenticated, IsAdministrator] 
     
 #Métodos Team_Members
 class MemberListCreate(generics.ListCreateAPIView):
     queryset = Member.objects.all()
-    serializer_class = MemberSerializer 
+    serializer_class = MemberSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos verlos 
 
 class MemberDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Member.objects.all()
-    serializer_class = MemberSerializer      
+    serializer_class = MemberSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator]      
 
 #Métodos Partnerships
 class PartnershipListCreate(generics.ListCreateAPIView):
@@ -171,12 +182,12 @@ class PartnershipDetail(generics.RetrieveUpdateDestroyAPIView):
 class GraduatedListCreate(generics.ListCreateAPIView):
     queryset = Graduated.objects.all()
     serializer_class = GraduatedSerializer 
-    permission_classes = [AllowAny]  # Permitir acceso a todos sin autenticación
+    permission_classes = [AllowAny]  #Permitir acceso a todos verlos
 
 class GraduatedDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Graduated.objects.all()
     serializer_class = GraduatedSerializer
-    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
+    permission_classes = [IsAuthenticated, IsAdministrator]  
     
     
 #/////////////////// 2. Relación Uno a Uno ///////////////////#
@@ -185,39 +196,45 @@ class GraduatedDetail(generics.RetrieveUpdateDestroyAPIView):
 class Administrative_StaffListCreate(generics.ListCreateAPIView):
     queryset = Administrative_Staff.objects.all()
     serializer_class = Administrative_StaffSerializer 
-    
+    permission_classes = [AllowAny]  #Permitir acceso a todos verlos 
 
 class Administrative_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Administrative_Staff.objects.all()
     serializer_class = Administrative_StaffSerializer 
-    #permission_classes = [IsAuthenticated]   
-    
+    permission_classes = [IsAuthenticated, IsAdministrator]     
+
 #Métodos Cleaning_Staff
 class Cleaning_StaffListCreate(generics.ListCreateAPIView):
     queryset = Cleaning_Staff.objects.all()
-    serializer_class = Cleaning_StaffSerializer 
+    serializer_class = Cleaning_StaffSerializer
+    permission_classes = [AllowAny]     
 
 class Cleaning_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Cleaning_Staff.objects.all()
-    serializer_class = Cleaning_StaffSerializer   
+    serializer_class = Cleaning_StaffSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator]     
     
 #Métodos Maintenance_Staff
 class Maintenance_StaffListCreate(generics.ListCreateAPIView):
     queryset = Maintenance_Staff.objects.all()
     serializer_class = Maintenance_StaffSerializer 
+    permission_classes = [AllowAny]  #Permitir acceso a todos verlos
 
 class Maintenance_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Maintenance_Staff.objects.all()
     serializer_class = Maintenance_StaffSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator]  
 
 #Métodos Security_Staff
 class Security_StaffListCreate(generics.ListCreateAPIView):
     queryset = Security_Staff.objects.all()
     serializer_class = Security_StaffSerializer 
+    permission_classes = [AllowAny]  #Permitir acceso a todos verlos
 
 class Security_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Security_Staff.objects.all()
     serializer_class = Security_StaffSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator]  
 
 
 #/////////////////// 3. Relación uno a muchos ///////////////////#
@@ -225,48 +242,58 @@ class Security_StaffDetail(generics.RetrieveUpdateDestroyAPIView):
 #Métodos Reservations
 class ReservationListCreate(generics.ListCreateAPIView):
     queryset = Reservation.objects.all()
-    serializer_class = ReservationSerializer 
+    serializer_class = ReservationSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator] #Solo el administrador puede verlos
 
 class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos para hacer reservaciones
 
 #Métodos SoccerField_Reservations
 class SoccerField_ReservationListCreate(generics.ListCreateAPIView):
     queryset = SoccerField_Reservation.objects.all()
     serializer_class = SoccerField_ReservationSerializer 
+    permission_classes = [IsAuthenticated, IsAdministrator] #Solo el administrador puede verlos
 
 class SoccerField_ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = SoccerField_Reservation.objects.all()
     serializer_class = SoccerField_ReservationSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos para hacer reservaciones
 
 #Métodos Coworking_Reservations
 class Coworking_ReservationListCreate(generics.ListCreateAPIView):
     queryset = Coworking_Reservation.objects.all()
-    serializer_class = Coworking_ReservationSerializer 
+    serializer_class = Coworking_ReservationSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator] #Solo el administrador puede verlos
 
 class Coworking_ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Coworking_Reservation.objects.all()
     serializer_class = Coworking_ReservationSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos para hacer reservaciones
 
 #Métodos Salon_Reservations
 class Salon_ReservationListCreate(generics.ListCreateAPIView):
     queryset = Salon_Reservation.objects.all()
-    serializer_class = Salon_ReservationSerializer 
+    serializer_class = Salon_ReservationSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator] #Solo el administrador puede verlos
 
 class Salon_ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Salon_Reservation.objects.all()
     serializer_class = Salon_ReservationSerializer
+    permission_classes = [AllowAny]  #Permitir acceso a todos para hacer reservaciones
 
 
 #Métodos Early_Exit_Permissions
 class Early_Exit_PermissionListCreate(generics.ListCreateAPIView):
     queryset = Early_Exit_Permission.objects.all()
-    serializer_class = Early_Exit_PermissionSerializer 
+    serializer_class = Early_Exit_PermissionSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator] 
     
 class Early_Exit_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Early_Exit_Permission.objects.all()
     serializer_class = Early_Exit_PermissionSerializer
+    permission_classes = [IsAuthenticated, IsAdministrator, IsProfesor, IsEstudiante] #Todos ellos pueden hacer post
 
 #Métodos Meeting_Request_Permissions
 class Meeting_Request_PermissionListCreate(generics.ListCreateAPIView):
@@ -283,12 +310,12 @@ class Meeting_Request_PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
 class CourseListCreate(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer 
-    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
+    permission_classes = [IsAuthenticated,IsEstudiante] #Permitir acceso a todos sin autenticación
 
 class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [AllowAny]  #Permitir acceso a todos sin autenticación
+    permission_classes = [IsAuthenticated, IsAdministrator] 
 
 
 #Métodos Permission_Slips
@@ -331,3 +358,39 @@ class StudentCourseView(APIView):
         serializer = StudentCourseSerializer(registrations, many=True)
         return Response(serializer.data)
 
+
+
+
+
+"""
+#Se define la vista 'register_user' para manejar solicitudes HTTP de tipo POST
+@api_view(['POST'])
+def register_user(request):
+    #Crea una instancia del serializador de usuario, tomando los datos que se envían en la solicitud POST
+    serializer = UserRegisterSerializer(data=request.data)
+
+    #Verificar si los datos cumplen con las reglas de validación del serializador
+    if serializer.is_valid():
+        #Si los datos son válidos, guarda el nuevo usuario en la base de datos
+        #Aquí se asegura de que la contraseña esté encriptada y los datos cumplan con el modelo de usuario
+        user = serializer.save()
+        
+        #Para agregar usuario a un grupo en especifico
+        # Obtén el nombre del grupo desde los datos enviados en la solicitud
+        grupo_nombre = request.data.get('grupo', None)
+        
+        if grupo_nombre:
+            try:
+                grupo = Group.objects.get(name=grupo_nombre)
+                usuario.groups.add(grupo)
+            except Group.DoesNotExist:
+                return Response({"error": "El grupo especificado no existe."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        #grupo_estudiante = Group.objects.get(name="Administrador")
+        #usuario.groups.add(grupo_administrador)
+
+        return Response({"message": "¡Usuario creado con éxito!"}, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+"""

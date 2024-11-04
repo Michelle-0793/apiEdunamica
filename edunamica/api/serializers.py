@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework import serializers
 import re
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import get_user_model
 
 
@@ -37,24 +37,33 @@ from .models import Role_Permission
 User = get_user_model()
 #REGISTRO
 class UserRegisterSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password','role']
 
     def create(self, validated_data):
-        user = User(
-            username=validated_data['username'],
-            email=validated_data['email'],
-        )
+        role = validated_data.pop('role')  #Traer el rol de validated_date
+        
+        user = User(**validated_data)
+        
         user.set_password(validated_data['password'])
         user.save()
+        
+        if role:
+            try: 
+                group = Group.objects.get(name = role)
+                user.groups.add(group)
+            except Group.DoesNotExist:
+                raise serializers.ValidationError(f"El grupo '{role}' no existe")
+        
         return user
     
 #VER LOS USUARIOS REGISTRADOS   
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username'] 
+        fields ="__all__"
 
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
