@@ -1,14 +1,21 @@
 from rest_framework import generics
 from django.shortcuts import render
-
+from rest_framework import status
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import StudentCourseSerializer
 
+from .serializers import UserRegisterSerializer
+from rest_framework.decorators import api_view
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny  #Importa AllowAny
+#Para ver la lista de usuarios en postman
+from .serializers import UserListSerializer
+from django.contrib.auth import get_user_model
+
+#TOKEN
+from rest_framework.permissions import IsAuthenticated,AllowAny  
+
 
 #IMPORTS MODELS
 from .models import Rol
@@ -58,6 +65,34 @@ from .serializers import ReservationSerializer
 from .serializers import Permission_SlipSerializer
 from .serializers import Role_PermissionSerializer
 
+
+#VISTA REGISTRO DE USUARIOS TABLA DE DJANGO
+User = get_user_model()
+
+#Se define la vista 'register_user' para manejar solicitudes HTTP de tipo POST
+@api_view(['POST'])
+def register_user(request):
+    #Crea una instancia del serializador de usuario, tomando los datos que se envían en la solicitud POST
+    serializer = UserRegisterSerializer(data=request.data)
+
+    #Verificar si los datos cumplen con las reglas de validación del serializador
+    if serializer.is_valid():
+        #Si los datos son válidos, guarda el nuevo usuario en la base de datos
+        #Aquí se asegura de que la contraseña esté encriptada y los datos cumplan con el modelo de usuario
+        user = serializer.save()
+
+        return Response({"message": "¡Usuario creado con éxito!"}, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#LISTA DE USUARIOS
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = [IsAuthenticated]  #Requiere autenticación con token
+
+
 #/////////////////// 1. Principales ///////////////////#
 
 #Métodos roles
@@ -86,7 +121,7 @@ class PermissionDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserListCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -295,3 +330,4 @@ class StudentCourseView(APIView):
         registrations = Registration.objects.prefetch_related('Course__teacher', 'Student')
         serializer = StudentCourseSerializer(registrations, many=True)
         return Response(serializer.data)
+

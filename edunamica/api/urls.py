@@ -1,11 +1,13 @@
 from django.urls import path
 from . import views
 from .views import StudentCourseView
+from .views import register_user
+from .views import UserListView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
 
-    path('token/', TokenObtainPairView.as_view(), name = 'token_obtain_pair'),
+    path ('token/', TokenObtainPairView.as_view(), name = 'token_obtain_pair'),
     path ('token/refresh/', TokenRefreshView.as_view(), name= 'token_resfresh'),
     
     path('roles/', views.RolListCreate.as_view(), name='rol-list-create'),
@@ -14,7 +16,7 @@ urlpatterns = [
     path('accesosRol/', views.PermissionListCreate.as_view(), name = 'Permission-List-Create'),
     path('accesosRol/<int:pk>/', views.PermissionDetail.as_view(), name= 'Permission-Detail'),
     
-   path('usuarios/', views.UserListCreate.as_view(), name='user-list-create'),
+    path('usuarios/', views.UserListCreate.as_view(), name='user-list-create'),
     path('usuarios/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),  
 
     path('estudiantes/', views.StudentListCreate.as_view(), name = 'Student-List-Create'),
@@ -76,5 +78,10 @@ urlpatterns = [
     
     path('estudiantes_cursos/', StudentCourseView.as_view(), name='student-course-list'),
     
+    path('register/', register_user, name='register_user'),
+    
+    path('users/', UserListView.as_view(), name='user-list'),
+    
 ]
 
+#path('registro/', UserRegisterView.as_view(), name='register'),

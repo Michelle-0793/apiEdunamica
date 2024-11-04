@@ -5,6 +5,10 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+from django.contrib.auth.models import User
+
+
+
 #///////////////////1. Tablas de Apoyo y Base: Sin Dependencias Externas///////////////////#
 
 class Rol(models.Model):
@@ -22,8 +26,8 @@ class Permission (models.Model):
          return str(self.Permission_Name)
 
 class User(models.Model):
-    Username = models.CharField(max_length=150, unique=True)  
-    Password_hash = models.CharField(max_length=255)
+    password = models.CharField(max_length=150, unique=True)  
+    last_login = models.CharField(max_length=255)
     Email = models.EmailField(max_length=255, unique=True) 
     Role = models.ForeignKey(Rol, on_delete=models.CASCADE) 
     Created_at = models.DateTimeField(auto_now_add=True)

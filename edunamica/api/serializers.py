@@ -4,6 +4,10 @@ from django.utils import timezone
 from rest_framework import serializers
 import re
 
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+
 #IMPORTS MODELS
 from .models import Rol
 from .models import Permission
@@ -27,6 +31,30 @@ from .models import Registration
 from .models import Reservation
 from .models import Permission_Slip
 from .models import Role_Permission
+
+
+#Serializador de registro de usuario a la tabla de Django auth_user
+User = get_user_model()
+#REGISTRO
+class UserRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def create(self, validated_data):
+        user = User(
+            username=validated_data['username'],
+            email=validated_data['email'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+    
+#VER LOS USUARIOS REGISTRADOS   
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username'] 
 
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
@@ -94,7 +122,6 @@ class UserSerializer(serializers.ModelSerializer):
          if not re.search(r'[0-9]', value):
             raise ValidationError("La contraseña debe contener al menos un número.")
          return value
-
 
 
 class StudentSerializer(serializers.ModelSerializer):
